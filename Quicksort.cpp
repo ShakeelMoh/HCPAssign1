@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <omp.h>
 
 #define MAXCHAR 1000
 // A utility function to swap two elements
@@ -64,34 +66,41 @@ void printArray(int arr[], int size)
 // Driver program to test above functions
 int main()
 {
+
+    //Time constructs
+    double total_time;
+    clock_t start, end;
+
+    //Reading from file
     FILE *fp;
     char str[MAXCHAR];
-    char const *filename = "./1000Ints.txt";
+    char const *filename = "./1000000Ints.txt";
     int size; //Size of array
     fp = fopen(filename, "r");
+
     if (fp == NULL)
     {
         printf("Couldn't open file %s", filename);
         return 1;
     }
 
-    int c = 0;
     while (fgets(str, MAXCHAR, fp) != NULL)
     {
-        if (c == 0)
-        {
-            size = atoi(str);
-            printf("Size of array: %d \n", size);
-            c++;
-        }
+
+        size = atoi(str);
+        printf("Size of array: %d \n", size);
+        break;
     }
+
     fclose(fp);
 
     fp = fopen(filename, "r");
 
-    int arr[size] = {0};
-    c = 0;
+    int *arr = new int[size];
+
+    int c = 0;
     int skip = 0;
+
     while (fgets(str, MAXCHAR, fp) != NULL)
     {
         if (skip == 0)
@@ -101,18 +110,56 @@ int main()
         else
         {
             arr[c] = atoi(str);
+
+            //printf("%d", arr[c]);
             //printf("%s", str);
             //printf("Yo %s", arr);
             c++;
         }
     }
-
+    printf("Lines read: %d\n", c);
     fclose(fp);
 
     //int arr[] = {10, 7, 8, 9, 1, 5};
+
     int n = sizeof(arr) / sizeof(arr[0]);
+    n = size;
+    //start = clock();
+
+    double startTime, endTime, runTime;
+
+    //omp_set_dynamic(0); // Explicitly disable dynamic teams
+    //omp_set_num_threads(4);
+
+    int threads = omp_get_max_threads();
+    printf("NUM THREADS: %d \n", threads);
+
+    //Start timer
+    startTime = omp_get_wtime();
+
     quickSort(arr, 0, n - 1);
-    printf("Sorted array: ");
-    printArray(arr, n);
+
+    endTime = omp_get_wtime();
+    runTime = endTime - startTime;
+
+    //printf("Start time %d\n", startTime);
+    //printf("End time %d\n", endTime);
+    //end = clock();
+
+    //printf("Start: %d, End: %d", start, end);
+    //total_time = ((double)(end - start)) / CLK_TCK;
+    //printf("Total time: %d \n", total_time);
+    printf("Run time: %f \n", runTime);
+    printf("Sorted array!");
+
+    if (n < 10000000)
+    {
+        //printArray(arr, size);
+    }
+    else
+    {
+        printf("\nDone!");
+    }
+    //delete[] arr;
     return 0;
 }

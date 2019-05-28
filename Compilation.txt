@@ -1,0 +1,21 @@
+g++ -fopenmp QuicksortOpenMP.c -o QuicksortOpenMP
+g++ -fopenmp Quicksort.c -o Quicksort
+
+4k ints atm
+
+Results
+
+Quicksort Serial (On desktop) i5 6 cores
+All threads give same result
+1 Million: 0.16s
+100k: 0.013s
+10k: 0.001s
+1k: 0s
+100: 0s
+
+
+Quicksort Serial (On Cluster)
+
+1 Mill Elements
+
+0.5438
