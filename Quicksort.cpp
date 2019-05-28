@@ -4,6 +4,7 @@
 #include <omp.h>
 
 #define MAXCHAR 1000
+
 // A utility function to swap two elements
 void swap(int *a, int *b)
 {
@@ -63,6 +64,26 @@ void printArray(int arr[], int size)
         printf("%d ", arr[i]);
 }
 
+//Function to check sorted array
+bool checkArray(int arr[], int size){
+    bool sorted = true;
+    for (int i = 0; i < size-1; i++){
+        if (arr[i] < arr[i+1]){
+
+        } else {
+            sorted = false;
+        }
+       
+    }
+    if (sorted){
+            printf("Array is sorted!");
+        } else {
+            printf("Array is NOT sorted");
+        }
+    return sorted;
+
+}
+
 // Driver program to test above functions
 int main()
 {
@@ -96,8 +117,10 @@ int main()
 
     fp = fopen(filename, "r");
 
+    //Initialize array on heap
     int *arr = new int[size];
 
+    //For checking purposes
     int c = 0;
     int skip = 0;
 
@@ -110,21 +133,14 @@ int main()
         else
         {
             arr[c] = atoi(str);
-
-            //printf("%d", arr[c]);
-            //printf("%s", str);
-            //printf("Yo %s", arr);
             c++;
         }
     }
     printf("Lines read: %d\n", c);
     fclose(fp);
 
-    //int arr[] = {10, 7, 8, 9, 1, 5};
-
     int n = sizeof(arr) / sizeof(arr[0]);
     n = size;
-    //start = clock();
 
     double startTime, endTime, runTime;
 
@@ -139,27 +155,22 @@ int main()
 
     quickSort(arr, 0, n - 1);
 
+    //End timer
     endTime = omp_get_wtime();
     runTime = endTime - startTime;
 
-    //printf("Start time %d\n", startTime);
-    //printf("End time %d\n", endTime);
-    //end = clock();
+    printf("\nDone!\n");
 
-    //printf("Start: %d, End: %d", start, end);
-    //total_time = ((double)(end - start)) / CLK_TCK;
-    //printf("Total time: %d \n", total_time);
     printf("Run time: %f \n", runTime);
-    printf("Sorted array!");
 
+    /*
     if (n < 10000000)
     {
-        //printArray(arr, size);
+        printArray(arr, size);
     }
-    else
-    {
-        printf("\nDone!");
-    }
-    //delete[] arr;
+    */
+
+    checkArray(arr, size);
+    delete[] arr;
     return 0;
 }

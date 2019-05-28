@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h> 
 #include <omp.h>
 
 #define MAXCHAR 1000
@@ -57,21 +58,6 @@ void quickSort(int arr[], int low, int high)
             quickSort(arr, pi + 1, high);
         }
 
-        // Separately sort elements before
-        // partition and after partition
-        /*
-#pragma omp parallel sections
-        {
-#pragma omp section
-            {
-                quickSort(arr, low, pi - 1);
-            }
-#pragma omp section
-            {
-                quickSort(arr, pi + 1, high);
-            }
-        }
-        */
     }
 }
 
@@ -83,14 +69,29 @@ void printArray(int arr[], int size)
         printf("%d ", arr[i]);
 }
 
+//Function to check sorted array
+bool checkArray(int arr[], int size){
+    bool sorted = true;
+    for (int i = 0; i < size-1; i++){
+        if (arr[i] < arr[i+1]){
+
+        } else {
+            sorted = false;
+        }
+        
+    }
+    if (sorted){
+            printf("Array is sorted!");
+        } else {
+            printf("Array is NOT sorted");
+        }
+    return sorted;
+
+}
+
 // Driver program to test above functions
 int main()
 {
-
-    //Misc information
-    //omp_set_num_threads(1);
-    //int threads = omp_get_num_threads();
-    //printf("Number of threads: %d", threads);
 
     FILE *fp;
     char str[MAXCHAR];
@@ -129,35 +130,31 @@ int main()
         else
         {
             arr[c] = atoi(str);
-            //printf("%s", str);
-            //printf("Yo %s", arr);
             c++;
         }
     }
 
     fclose(fp);
 
-    //int arr[] = {10, 7, 8, 9, 1, 5};
     int n = sizeof(arr) / sizeof(arr[0]);
 
     double startTime, endTime, runTime;
 
-    //{
-    //Start timer
-    startTime = omp_get_wtime();
+
 
     omp_set_dynamic(0); // Explicitly disable dynamic teams
     omp_set_num_threads(2);
 
     int threads = omp_get_max_threads();
-    printf("MAX THREADS: %d", threads);
+    printf("MAX THREADS: %d\n", threads);
+
+    //Start timer
+    startTime = omp_get_wtime();
 
 //#pragma omp parallel
 #pragma omp parallel default(none) shared(arr, n)
 
     {
-        //int threads = omp_get_num_threads();
-        //printf("Number of threads: %d", threads);
 #pragma omp single nowait
         {
             quickSort(arr, 0, n - 1);
@@ -169,12 +166,11 @@ int main()
     //Run time
     runTime = endTime - startTime;
 
-    printf("Sorted array: ");
+    printf("\nDone!\n");
 
-    printf("Time taken: %f", runTime);
+    printf("Time taken: %f\n", runTime);
 
-    //printArray(arr, n);
-    //}
+    checkArray(arr, size);
 
     return 0;
 }
