@@ -9,6 +9,8 @@ QuicksortOpenMP: QuicksortOpenMP.c
 PSRS: PSRS.c
 	gcc -fopenmp PSRS.c -o PSRS -lm
 
+PSRS_MPI: PSRS_MPI.c
+	gcc -fopenmp PSRS_MPI.c -o PSRS_MPI
 	
 
 clean:
