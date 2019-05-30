@@ -1,8 +1,12 @@
 To compile the programs use
 
 
+SERIAL ALGORITHM:
+
 make Quicksort
 Run: ./Quicksort
+
+OPENMP ALGORITHMS:
 
 make QuicksortOpenMP
 Run: ./QuicksortOpenMP
@@ -10,7 +14,14 @@ Run: ./QuicksortOpenMP
 make PSRS
 Run: ./PSRS
 
-make PSRS_MPI
-Run: mpirun PSRS_MPI
+OPENMP ALGORITHMS:
 
-make clean - cleans all .o files
+make Quicksort_MPI
+Run: mpirun -n 2 Quicksort_MPI
+
+make PSRS_MPI
+Run: mpirun -n 2 PSRS_MPI
+
+CLEAN OBJECT FILES
+
+make clean
